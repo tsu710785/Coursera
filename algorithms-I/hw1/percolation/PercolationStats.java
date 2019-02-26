@@ -1,27 +1,31 @@
 /* *****************************************************************************
- *  Name:
- *  Date:
- *  Description:
+ *  Name: Benson Chang
+ *  Date: 2019.02.26
+ *  Description: algo-hw1
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    private double mean;
-    private double stddev;
-    private double confidenceLow;
-    private double confidenceHigh;
+    private final double mean;
+    private final double stddev;
+    private final double confidenceLow;
+    private final double confidenceHigh;
+    private static final double CONFIDENCE_95 = 1.96;
 
     public PercolationStats(int n, int trials) {
-        double testResult[] = new double[trials];
+        if (n <= 0 || trials <= 0) {
+            throw new IllegalArgumentException("invalid arguments");
+        }
+        double[] testResult = new double[trials];
         for (int i = 0; i < trials; i++) {
             testResult[i] = simulation(n);
         }
         this.mean = StdStats.mean(testResult);
         this.stddev = StdStats.stddev(testResult);
-        this.confidenceLow = this.mean - 1.96 * this.stddev / Math.sqrt(trials);
-        this.confidenceHigh = this.mean + 1.96 * this.stddev / Math.sqrt(trials);
+        this.confidenceLow = this.mean - CONFIDENCE_95 * this.stddev / Math.sqrt(trials);
+        this.confidenceHigh = this.mean + CONFIDENCE_95 * this.stddev / Math.sqrt(trials);
 
     }    // perform trials independent experiments on an n-by-n grid
 

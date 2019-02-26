@@ -11,22 +11,20 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private WeightedQuickUnionUF grid;
-    private int n, openCount;
+    private final WeightedQuickUnionUF grid;
+    private final int n;
+    private int openCount;
     private boolean[] block;
 
     public Percolation(int n) // create n-by-n grid, with all sites blocked
     {
+        if (n <= 0) {
+            throw new IllegalArgumentException("n can only be positive integer");
+        }
         this.n = n;
         openCount = 0;
         grid = new WeightedQuickUnionUF(n * n + 2);
         block = new boolean[n * n];
-        // for (int i = 0; i < n; i++) {
-        //     grid.union(i + 1, 0);
-        // }
-        // for (int i = n * n - n; i < n * n; i++) {
-        //     grid.union(i + 1, n * n + 1);
-        // }
     }
 
     public void open(int row, int col) {
@@ -60,10 +58,10 @@ public class Percolation {
 
     public boolean isOpen(int row, int col) {
         validate(row, col);
-        return block[row * n + col - n - 1];
+        return block[n * (row - 1) + col - 1];
     }
 
-    public void validate(int row, int col) {
+    private void validate(int row, int col) {
         if (row <= 0 || row > n || col <= 0 || col > n) {
             throw new IllegalArgumentException("index out of range");
         }
@@ -71,7 +69,7 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
         validate(row, col);
-        return grid.connected(row * n - n + col + 1, 0);
+        return grid.connected(n * (row - 1) + col, 0);
     }
 
     public int numberOfOpenSites() {
@@ -82,49 +80,25 @@ public class Percolation {
         return grid.connected(0, n * n + 1);
     }
 
-    public void print() {
-        for (int i = 0; i < n * n; i++) {
-            System.out.print(block[i]);
-            if ((i + 1) % n == 0) {
-                System.out.print("\n");
-            }
-            else {
-                System.out.print(" ");
-            }
-        }
-        System.out.println("----");
-    }
+    // private void print() {
+    //     for (int i = 0; i < n * n; i++) {
+    //         System.out.print(block[i]);
+    //         if ((i + 1) % n == 0) {
+    //             System.out.print("\n");
+    //         }
+    //         else {
+    //             System.out.print(" ");
+    //         }
+    //     }
+    //     System.out.println("----");
+    // }
 
     public static void main(String[] args) {
 
         // int n = 3;
         // Percolation g = new Percolation(n);
-
-        //
         // g.print();
         // g.open(1, 1);
-        // g.print();
-        // System.out.println("0,1 " + g.grid.connected(0, 1));
-        // g.open(2, 1);
-        // g.print();
-        // System.out.println("1 parent " + g.grid.find(1));
-        // System.out.println("4 parent " + g.grid.find(4));
-        // System.out.println("0,4 " + g.grid.connected(0, 4));
-        // g.open(3, 2);
-        // System.out.println("0,7 " + g.grid.connected(0, 7));
-        // g.print();
-        // g.open(2, 2);
-        // g.print();
-        // g.open(3, 1);
-        // g.print();
-        // System.out.println(g.isFull(3, 1));
-        // System.out.println(g.percolates());
-        // g.print();
-        // g.block[0] = true;
-        // System.out.println(g.isOpen(1, 1));
-        // g.block[2] = true;
-        // g.print();
-        // System.out.println(g.isOpen(1, 3));
     }
 
 
